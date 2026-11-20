@@ -184,6 +184,8 @@ body {
   padding: 15px;
   border-radius: 4px;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 15px;
   min-height: 160px;
   text-align: left;
@@ -225,6 +227,33 @@ body {
 .product-card p {
   font-size: 14px;
   color: #666;
+}
+
+.product-card .product-description {
+  flex: 1 0 100%;
+  max-height: 0;
+  overflow: hidden;
+  margin-top: 0;
+  opacity: 0;
+  visibility: hidden;
+  line-height: 1.5;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.2s ease,
+    margin-top 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+
+.product-card:hover .product-description,
+.product-card:focus-visible .product-description {
+  max-height: 200px;
+  margin-top: 12px;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.2s ease,
+    margin-top 0.3s ease;
 }
 
 /* selected products */

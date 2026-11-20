@@ -39,8 +39,9 @@ function displayProducts(products) {
       <img src="${product.image}" alt="${product.name}">
       <div class="product-info">
         <h3>${product.name}</h3>
-        <p>${product.brand}</p>
+        <p class="product-brand">${product.brand}</p>
       </div>
+      <p class="product-description">${product.description}</p>
     </button>
   `;
       }
@@ -63,7 +64,7 @@ productsContainer.addEventListener("click", (e) => {
 
   if (selectedIndex === -1) {
     const productName = productCard.querySelector("h3").textContent;
-    const productBrand = productCard.querySelector("p").textContent;
+    const productBrand = productCard.querySelector(".product-brand").textContent;
     selectedProducts.push({
       id: productId,
       name: productName,
