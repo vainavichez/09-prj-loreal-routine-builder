@@ -1,4 +1,11 @@
 /* —— basic reset —— */
+:root {
+  --color-gold:#e3a535;
+  --color-red: #ff003b;
+  --color-white: #ffffff;
+  --color-black: #000000;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -72,6 +79,8 @@ body {
 }
 
 .chat-window {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
   font-size: 18px;
   line-height: 1.5;
@@ -82,8 +91,22 @@ body {
 }
 
 .chat-message {
+  max-width: 80%;
+  padding: 10px 14px;
   margin-bottom: 12px;
+  border-radius: 16px;
+  color: var(--color-black);
   white-space: pre-wrap;
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  background-color: var(--color-red);
+}
+
+.chat-message.assistant {
+  align-self: flex-start;
+  background-color: var(--color-gold);
 }
 
 /* placeholder message */
