@@ -5,10 +5,40 @@ const chatForm = document.getElementById("chatForm");
 const chatWindow = document.getElementById("chatWindow");
 const selectedProductsList = document.getElementById("selectedProductsList");
 const generateRoutineButton = document.getElementById("generateRoutine");
+const clearSelectedProductsButton = document.getElementById(
+  "clearSelectedProducts"
+);
 const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendBtn");
 const workerURL = "https://calm-morning-b2c8.chvainavi.workers.dev/";
-const selectedProducts = [];
+const selectedProductsStorageKey = "selectedProducts";
+
+/* Restore saved product selections from this browser */
+function loadSavedProducts() {
+  try {
+    const savedProducts = JSON.parse(
+      localStorage.getItem(selectedProductsStorageKey) || "[]"
+    );
+
+    if (!Array.isArray(savedProducts)) {
+      throw new Error("Saved product selections must be a list.");
+    }
+
+    return savedProducts.filter(
+      (product) =>
+        product &&
+        Number.isInteger(product.id) &&
+        typeof product.name === "string" &&
+        typeof product.brand === "string" &&
+        typeof product.description === "string"
+    );
+  } catch (error) {
+    console.error("Unable to restore saved product selections:", error);
+    return [];
+  }
+}
+
+const selectedProducts = loadSavedProducts();
 const messages = [];
 
 /* Show initial placeholder until user selects a category */
@@ -54,6 +84,34 @@ function displayProducts(products) {
     .join("");
 }
 
+/* Show the selected products and update the clear button */
+function renderSelectedProducts() {
+  selectedProductsList.replaceChildren();
+
+  selectedProducts.forEach((product) => {
+    const productElement = document.createElement("div");
+    productElement.className = "selected-product-item";
+    productElement.textContent = `${product.name} - ${product.brand}`;
+    selectedProductsList.append(productElement);
+  });
+
+  clearSelectedProductsButton.disabled = selectedProducts.length === 0;
+}
+
+/* Save the current selections so they are available after a reload */
+function saveSelectedProducts() {
+  try {
+    localStorage.setItem(
+      selectedProductsStorageKey,
+      JSON.stringify(selectedProducts)
+    );
+  } catch (error) {
+    console.error("Unable to save product selections:", error);
+  }
+}
+
+renderSelectedProducts();
+
 /* Add or remove a product from the selected products list */
 productsContainer.addEventListener("click", (e) => {
   const productCard = e.target.closest(".product-card");
@@ -87,12 +145,20 @@ productsContainer.addEventListener("click", (e) => {
   productCard.classList.toggle("selected", isSelected);
   productCard.setAttribute("aria-pressed", isSelected);
 
-  selectedProductsList.innerHTML = selectedProducts
-    .map(
-      (product) =>
-        `<div class="selected-product-item">${product.name} - ${product.brand}</div>`
-    )
-    .join("");
+  saveSelectedProducts();
+  renderSelectedProducts();
+});
+
+/* Remove every selected product at once */
+clearSelectedProductsButton.addEventListener("click", () => {
+  selectedProducts.length = 0;
+  productsContainer.querySelectorAll(".product-card").forEach((productCard) => {
+    productCard.classList.remove("selected");
+    productCard.setAttribute("aria-pressed", "false");
+  });
+
+  saveSelectedProducts();
+  renderSelectedProducts();
 });
 
 /* Add a safely rendered message to the chat window */
