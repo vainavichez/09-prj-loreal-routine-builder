@@ -9,13 +9,7 @@ const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendBtn");
 const workerURL = "https://calm-morning-b2c8.chvainavi.workers.dev/";
 const selectedProducts = [];
-const messages = [
-  {
-    role: "system",
-    content:
-      "You are a helpful L'Oréal beauty advisor. Create practical routines using the products selected by the user, and answer follow-up questions using the conversation.",
-  },
-];
+const messages = [];
 
 /* Show initial placeholder until user selects a category */
 productsContainer.innerHTML = `

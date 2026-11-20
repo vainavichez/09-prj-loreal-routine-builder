@@ -18,8 +18,16 @@ export default {
 
     const requestBody = {
       model: 'gpt-4o',
-      messages: userInput.messages,
-      max_completion_tokens: 300,
+      messages: [
+        {
+          role: 'system',
+          content: "You are L'Oréal's beauty assistant. Answer only questions about the generated routine and L'Oréal products, product recommendations, in skincare, haircare, makeup, fragrance in other areas. If a request is outside these topics, politely explain that you can only help with L'Oréal products and beauty routines, then invite an in-scope question. Do not invent product details; say when you are unsure."
+        },
+        ...userInput.messages.filter((message) => message.role !== 'system')
+      ],
+      max_completion_tokens: 800,
+      temperature: 0.5,
+      frequency_penalty: 0.5,
     };
 
     const response = await fetch(apiUrl, {
