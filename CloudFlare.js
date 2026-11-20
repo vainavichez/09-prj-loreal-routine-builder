@@ -12,7 +12,7 @@ export default {
       return new Response(null, { headers: corsHeaders });
     }
 
-    const apiKey= "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";
+    const apiKey= env.OPENAI_API_KEY;
     const apiUrl = 'https://api.openai.com/v1/chat/completions';
     const userInput = await request.json();
 
